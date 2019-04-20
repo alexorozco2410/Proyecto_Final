@@ -41,8 +41,8 @@ void Toroide::init()
 		{
 			// unit cylinder
 
-			x = cos(a)*(10+cos(b));
-			y = sin(a)*(10+cos(b));
+			x = cos(a)*(2+cos(b));
+			y = sin(a)*(2+cos(b));
 			z = sin(b);
 			toroide_pos[ix + 0] = x * r;
 			toroide_pos[ix + 1] = y * r;
