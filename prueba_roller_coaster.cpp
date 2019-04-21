@@ -216,10 +216,10 @@ void display(void)
 	my_sphere.render();	//Sphere
 	//glDrawArrays(GL_TRIANGLES, 0, 36);	//Light
 	*/
-	/*
+	
 	model = glm::mat4(1.0f); //inicializa la matriz para comenzar desde el origen (en este caso coincide con el sol que esta en el origen)
 	//model = glm::rotate(model, glm::radians(mercurio), glm::vec3(0, 1, 0));//genera el movimiento de traslacion, porque en este rotate model esta en el origen
-	model = glm::translate(model, glm::vec3(2.5, 0, 0));//s4e mueve 3 unidades a la derecha
+	//model = glm::translate(model, glm::vec3(2.5, 0, 0));//s4e mueve 3 unidades a la derecha
 	//model = glm::rotate(model, glm::radians(mercurio), glm::vec3(0, 1, 0));//indica sobre que eje se hara la rotacion
 	//temp01 = model;
 	//model = glm::rotate(model, glm::radians(mercurio), glm::vec3(0, 1, 0));
@@ -232,34 +232,23 @@ void display(void)
 	
 	//-----------Riel---------------------------------------
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(4.2, -1.5, 0));
+	//model = glm::translate(model, glm::vec3(4.2, -1.5, 0));
 	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
-	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1, 0, 0));
-	temp02 = model;
-	projectionShader.setMat4("model", model);
-	my_cylinder.riel(model);
+	//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+	//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1, 0, 0));
+	//temp02 = model;
+	//projectionShader.setMat4("model", model);
+	//my_cylinder.riel(model);
 
-	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0, 0, -8.0));
-	model = glm::scale(model, glm::vec3(1.0f, 2.0f, 1.0f));
-	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1, 0, 0));
-	projectionShader.setMat4("model", model);
-	my_cylinder.riel(model);
+	//my_cylinder.render();
 
-	//inclinacion del riel para la curva
-	//model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0, 1, 0));
-	model = glm::translate(model, glm::vec3(0, 0, -8.0));
-	//model = glm::scale(model, glm::vec3(3.0f, 1.0f, 1.0f));
-	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1, 0, 0));
-	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
-	projectionShader.setMat4("model", model);
-	my_cylinder.riel(model);
+
 	//-----------Riel---------------------------------------
-	*/
+	
 	
 	my_cylinder.roller_coaster();
-
+	//my_cylinder.render();
+	//my_cylinder.riel(model);
 	/*
 	lampShader.use();//esto es para indicar que shader se va a usar y poder cambiar entre shaders
 	lampShader.setMat4("projection", projection);

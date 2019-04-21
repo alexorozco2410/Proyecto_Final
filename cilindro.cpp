@@ -2,7 +2,7 @@
 
 //glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
 //GLuint VBO, VAO, lightVAO;
-Cilindro my_cylinder1(1.0);
+//Cilindro my_cylinder1(1.0);
 //Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 //int SCR_WIDTH = 3800;
 //int SCR_HEIGHT = 7600;
@@ -41,9 +41,9 @@ void Cilindro::init()
 		{
 			// unit cylinder
 
-			x = cos(a);
+			x = b;
 			y = sin(a);
-			z = b;
+			z = cos(a);
 			cilindro_pos[ix + 0] = x * r;
 			cilindro_pos[ix + 1] = y * r;
 			cilindro_pos[ix + 2] = z * r;
@@ -132,12 +132,12 @@ void Cilindro::riel(glm::mat4 model)
 	temp02 = model;
 
 	model = temp02;
-	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
+	model = glm::scale(model, glm::vec3(1.0f, 0.5f, 0.5f));
 	projectionShader.setMat4("model", model);
 	
 	glDrawElements(GL_TRIANGLES, sizeof(cilindro_index) / sizeof(GLuint), GL_UNSIGNED_INT, 0);    // indices (choose just one line not both !!!)
 	
-	model = glm::translate(model, glm::vec3(6.5, 0, 0));
+	model = glm::translate(model, glm::vec3(0.0, 0, 6.5));
 	projectionShader.setMat4("model", model);
 	glDrawElements(GL_TRIANGLES, sizeof(cilindro_index) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
@@ -150,22 +150,22 @@ void Cilindro::riel(glm::mat4 model)
 	glDrawElements(GL_TRIANGLES, sizeof(cilindro_index) / sizeof(GLuint), GL_UNSIGNED_INT, 0);*/
 
 	model = temp01;
-	model = glm::translate(model, glm::vec3(1.75f, 0.0f, 0.0f));
-	model = glm::scale(model, glm::vec3(1.0f, 0.2f, 0.2f));
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.75f));
+	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 1.0f));
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
 	projectionShader.setMat4("model", model);
 	glDrawElements(GL_TRIANGLES, sizeof(cilindro_index) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 	model = temp01;
-	model = glm::translate(model, glm::vec3(1.75f, 0.0f, -1.0f));
-	model = glm::scale(model, glm::vec3(1.0f, 0.2f, 0.2f));
+	model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 1.75f));
+	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 1.0f));
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
 	projectionShader.setMat4("model", model);
 	glDrawElements(GL_TRIANGLES, sizeof(cilindro_index) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
 	model = temp01;
-	model = glm::translate(model, glm::vec3(1.75f, 0.0f, 1.0f));
-	model = glm::scale(model, glm::vec3(1.0f, 0.2f, 0.2f));
+	model = glm::translate(model, glm::vec3(1.0f, 0.0f, 1.75f));
+	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 1.0f));
 	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
 	projectionShader.setMat4("model", model);
 	glDrawElements(GL_TRIANGLES, sizeof(cilindro_index) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
@@ -190,9 +190,9 @@ void Cilindro::roller_coaster()
 	//  glDrawArrays(GL_POINTS,0,sizeof(esfera_pos)/sizeof(GLfloat));     // POINTS ... no indices for debug
 	
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(-3.2, -1.5, 0));
-	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
-	model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.1f));
+	model = glm::translate(model, glm::vec3(0, -1.5, -3.2));
+	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
+	model = glm::scale(model, glm::vec3(0.1f, 0.05f, 0.05f));
 	temp04 = model;
 	projectionShader.setMat4("model", model);
 	projectionShader.setVec3("ambientColor", 0.0f, 0.0f, 1.0f);
@@ -202,94 +202,94 @@ void Cilindro::roller_coaster()
 	Cilindro::riel(model);
 	
 	for (int i = 0; i < 3; i++) {
-		model = glm::translate(model, glm::vec3(0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 	
 	//inicia curva de subida
 	
-	model = glm::translate(model, glm::vec3(0, 0.3, 2.0));
-	model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1, 0, 0));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
+	model = glm::translate(model, glm::vec3(2.0, 0.3, 0.0));
+	model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(0, 0, -1));
+	model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.4, 3.0));
-	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(3.0, 0.4, 0.0));
+	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, -1));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
 	//model = glm::translate(model, glm::vec3(0, 0.55, 4.6));
-	model = glm::translate(model, glm::vec3(0, 0.81, 6.15));
-	model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(1, 0, 0));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 3.0f));
+	model = glm::translate(model, glm::vec3(6.15, 0.81, 0));
+	model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(0, 0, -1));
+	model = glm::scale(model, glm::vec3(3.0f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 	
 	//subida
-	model = glm::translate(model, glm::vec3(0, 0.0, 4.71));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
+	model = glm::translate(model, glm::vec3(4.71, 0.0, 0));
+	model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
 	for (int i = 0; i < 5; i++) {
-		model = glm::translate(model, glm::vec3(0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 	//termina subida
 
 	//curva antes de la caida
-	model = glm::translate(model, glm::vec3(0, -0.7, 1.9));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.3f));
-	model = glm::rotate(model, glm::radians(30.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(1.9, -0.7, 0));
+	model = glm::scale(model, glm::vec3(0.3f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, -0.4, 2.9));
+	model = glm::translate(model, glm::vec3(2.9, -0.4, 0));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
-	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, -0.4, 3.0));
+	model = glm::translate(model, glm::vec3(3.0, -0.4, 0));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
-	model = glm::rotate(model, glm::radians(14.0f), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(-14.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
 	//antes de caida
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
-	model = glm::translate(model, glm::vec3(0, 0.0, 2.35));
+	model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(2.35, 0.0, 0));
 	//model = glm::rotate(model, glm::radians(30.0f), glm::vec3(1, 0, 0));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
 	//inicio de caida
-	model = glm::translate(model, glm::vec3(0, -1.0, 1.8));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
-	model = glm::rotate(model, glm::radians(55.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(1.8, -1.0, 0));
+	model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, -0.4, 3.0));
+	model = glm::translate(model, glm::vec3(3.0, -0.4, 0));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
-	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
-	model = glm::translate(model, glm::vec3(0, -0.4, 5.3));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.6f));
-	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(5.3, -0.4, 0));
+	model = glm::scale(model, glm::vec3(2.6f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
@@ -298,7 +298,7 @@ void Cilindro::roller_coaster()
 
 	//caida
 	for (int i = 0; i < 4; i++) {
-		model = glm::translate(model, glm::vec3(0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
@@ -306,47 +306,45 @@ void Cilindro::roller_coaster()
 
 
 	//curva nivel del piso es practicamente = a la primer curva para la subida
-	model = glm::translate(model, glm::vec3(0, 0.4, 1.9));
-	model = glm::rotate(model, glm::radians(-40.0f), glm::vec3(1, 0, 0));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
+	model = glm::translate(model, glm::vec3(1.9, 0.4, 0));
+	model = glm::rotate(model, glm::radians(40.0f), glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.55, 2.9));
-	model = glm::rotate(model, glm::radians(-23.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(2.9, 0.55, 0));
+	model = glm::rotate(model, glm::radians(23.0f), glm::vec3(0, 0, 1));
 	model = glm::scale(model, glm::vec3(1.0f, 0.8f, 1.0f));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
 	//model = glm::translate(model, glm::vec3(0, 0.55, 4.6));
-	model = glm::translate(model, glm::vec3(0, 0.3, 3.7));
-	model = glm::rotate(model, glm::radians(-8.0f), glm::vec3(1, 0, 0));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.5f));
+	model = glm::translate(model, glm::vec3(3.7, 0.3, 0));
+	model = glm::rotate(model, glm::radians(8.0f), glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(1.5f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.3, 3.0));
-	model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(3.0, 0.3, 0));
+	model = glm::rotate(model, glm::radians(10.0f), glm::vec3(0, 0, 1));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.5f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 	//termina curva nivel de piso
 
-	model = glm::translate(model, glm::vec3(0, 0.2, 3.8));
-	model = glm::rotate(model, glm::radians(-5.0f), glm::vec3(1, 0, 0));
-	model = glm::scale(model, glm::vec3(1.0f, 0.8f, 1.5f));
+	model = glm::translate(model, glm::vec3(3.8, 0.2, 0));
+	model = glm::rotate(model, glm::radians(5.0f), glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(1.5f, 0.8f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 	
-	
-	
 	//antes de giro de rueda
 	for (int i = 0; i < 5; i++) {
-		model = glm::translate(model, glm::vec3(0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0.0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
@@ -354,18 +352,18 @@ void Cilindro::roller_coaster()
 	
 	//giro de rueda
 	for (int i = 0; i < 35; i++) {
-		model = glm::translate(model, glm::vec3(0, 0.3, 3.1));
-		model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(1, 0, 0));
+		model = glm::translate(model, glm::vec3(3.1, 0.3, 0));
+		model = glm::rotate(model, glm::radians(10.0f), glm::vec3(0, 0, 1));
 		if (i < 9) {
 			model = glm::rotate(model, glm::radians(2.0f), glm::vec3(0, 1, 0));
-			model = glm::rotate(model, glm::radians(1.0f), glm::vec3(0, 0, 1));
+			model = glm::rotate(model, glm::radians(1.0f), glm::vec3(1, 0, 0));
 		}
 		if ( i > 8 && i < 31) {
 			model = glm::rotate(model, glm::radians(3.0f), glm::vec3(0, 1, 0));
-			model = glm::rotate(model, glm::radians(1.0f), glm::vec3(0, 0, -1));
+			model = glm::rotate(model, glm::radians(1.0f), glm::vec3(-1, 0, 0));
 		}
 		if (i > 30) {
-			model = glm::rotate(model, glm::radians(4.0f), glm::vec3(0, 0, -1));
+			model = glm::rotate(model, glm::radians(4.0f), glm::vec3(-1, 0, 0));
 		}
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
@@ -375,9 +373,9 @@ void Cilindro::roller_coaster()
 	//despues de la rueda, antes del ultimo giro
 	
 	
-	model = glm::scale(model, glm::vec3(0.8f, 0.8f, 1.0f));
+	model = glm::scale(model, glm::vec3(1.0f, 0.8f, 0.8f));
 	for (int i = 0; i < 4; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
@@ -385,191 +383,191 @@ void Cilindro::roller_coaster()
 	//model = glm::scale(model, glm::vec3(0.9f, 1.0f, 1.1f));
 	
 	for (int i = 0; i < 20; i++) {//e wey eran 20 xD
-		model = glm::translate(model, glm::vec3(0.0, 0.0, 2.7));
+		model = glm::translate(model, glm::vec3(2.7, 0.0, 0));
 		model = glm::rotate(model, glm::radians(-4.0f), glm::vec3(0, 1, 0));
-		model = glm::rotate(model, glm::radians(-4.0f), glm::vec3(1, 0, 0));
+		model = glm::rotate(model, glm::radians(4.0f), glm::vec3(0, 0, 1));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
 	//model = glm::scale(model, glm::vec3(0.9f, 1.0f, 1.1f));
 	for (int i = 0; i < 15; i++) {//e wey eran 15 xD
-		model = glm::translate(model, glm::vec3(0, 0.2, 2.7));
+		model = glm::translate(model, glm::vec3(2.7, 0.2, 0));
 		model = glm::rotate(model, glm::radians(-5.0f), glm::vec3(0, 1, 0));
-		model = glm::rotate(model, glm::radians(-5.0f), glm::vec3(1, 0, 0));
-		model = glm::rotate(model, glm::radians(-1.9f), glm::vec3(0, 0, 1));
+		model = glm::rotate(model, glm::radians(5.0f), glm::vec3(0, 0, 1));
+		model = glm::rotate(model, glm::radians(-1.9f), glm::vec3(1, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
 	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 1.1f));
 	for (int i = 0; i < 6; i++) {//ese we eran 6 xD
-		model = glm::translate(model, glm::vec3(-0.2, 0.0, 2.3));
+		model = glm::translate(model, glm::vec3(2.3, 0.0, 0.2));
 		model = glm::rotate(model, glm::radians(-8.6f), glm::vec3(0, 1, 0));
-		model = glm::rotate(model, glm::radians(-5.0f), glm::vec3(1, 0, 0));
-		model = glm::rotate(model, glm::radians(-1.9f), glm::vec3(0, 0, 1));
+		model = glm::rotate(model, glm::radians(5.0f), glm::vec3(0, 0, 1));
+		model = glm::rotate(model, glm::radians(-1.9f), glm::vec3(1, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 	
-	model = glm::scale(model, glm::vec3(0.9f, 0.9f, 1.5f));
-	model = glm::translate(model, glm::vec3(0, 0.0, 2.5));
-	model = glm::rotate(model, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+	model = glm::scale(model, glm::vec3(1.5f, 0.9f, 0.9f));
+	model = glm::translate(model, glm::vec3(2.5, 0.0, 0));
+	model = glm::rotate(model, glm::radians(5.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 	for (int i = 0; i < 20; i++) {
-		model = glm::translate(model, glm::vec3(0, 0.0, 3.0));
+		model = glm::translate(model, glm::vec3(3.0, 0.0, 0));
 		model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 1, 0));
-		model = glm::rotate(model, glm::radians(-0.5f), glm::vec3(1, 0, 0));
-		model = glm::rotate(model, glm::radians(2.0f), glm::vec3(0, 0, 1));
+		model = glm::rotate(model, glm::radians(0.5f), glm::vec3(0, 0, 1));
+		model = glm::rotate(model, glm::radians(2.0f), glm::vec3(1, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 	
 	//curva final de caida entre la rueda
-	model = glm::translate(model, glm::vec3(0, 0.2, 2.4));
-	model = glm::rotate(model, glm::radians(-18.0f), glm::vec3(1, 0, 0));
-	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 0, 1));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
+	model = glm::translate(model, glm::vec3(2.4, 0.2, 0));
+	model = glm::rotate(model, glm::radians(18.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
+	model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.3, 3.0));
+	model = glm::translate(model, glm::vec3(3.0, 0.3, 0));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 50.5f));
-	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(1, 0, 0));
-	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.1, 4.3));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
-	model = glm::rotate(model, glm::radians(-0.0f), glm::vec3(1, 0, 0));
-	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 0, 1));
+	model = glm::translate(model, glm::vec3(4.3, 0.1, 0));
+	model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 	
 	for (int i = 0; i < 6; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 	
 	temp03 = model; //para seguir despues de la rueda
-
+	//hasta aqui ya estan correguidos los angulos
 	//ultima subida
 
-	model = glm::translate(model, glm::vec3(0, 0.3, 2.0));
-	model = glm::rotate(model, glm::radians(-30.0f), glm::vec3(1, 0, 0));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
+	model = glm::translate(model, glm::vec3(2.0, 0.3, 0));
+	model = glm::rotate(model, glm::radians(30.0f), glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.4, 3.0));
-	model = glm::rotate(model, glm::radians(-20.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(3.0, 0.4, 0));
+	model = glm::rotate(model, glm::radians(20.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
 	//model = glm::translate(model, glm::vec3(0, 0.55, 4.6));
-	model = glm::translate(model, glm::vec3(0, 0.4, 3.0));
-	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(3.0, 0.4, 0));
+	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.81, 4.1));
-	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(1, 0, 0));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 3.0f));
+	model = glm::translate(model, glm::vec3(4.1, 0.81, 0));
+	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0, 0, 1));
+	model = glm::scale(model, glm::vec3(3.0f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 	for (int i = 0; i < 7; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
 	//nivelar ultima caida
-	model = glm::translate(model, glm::vec3(0, -0.7, 1.9));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.3f));
-	model = glm::rotate(model, glm::radians(25.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(1.9, -0.7, 0));
+	model = glm::scale(model, glm::vec3(0.3f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(-25.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, -0.4, 2.9));
+	model = glm::translate(model, glm::vec3(2.9, -0.4, 0));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
-	model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(-20.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, -0.4, 2.8));
+	model = glm::translate(model, glm::vec3(2.8, -0.4, 0));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
-	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 	//antes de empezar ultima caida
 	
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
-	model = glm::translate(model, glm::vec3(0.0, 0, 2.8));
+	model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0f));
+	model = glm::translate(model, glm::vec3(2.8, 0, 0));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 	
 	//giro antes de la caida
 
-	model = glm::translate(model, glm::vec3(0, 0.0, 2.2));
+	model = glm::translate(model, glm::vec3(2.2, 0.0, 0));
 	model = glm::rotate(model, glm::radians(-20.0f), glm::vec3(0, 1, 0));
-	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 0, 1));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
+	model = glm::scale(model, glm::vec3(0.5f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.0, 2.2));
+	model = glm::translate(model, glm::vec3(2.2, 0.0, 0));
 	model = glm::rotate(model, glm::radians(-25.0f), glm::vec3(0, 1, 0));
-	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
 	//model = glm::translate(model, glm::vec3(0, 0.55, 4.6));
-	model = glm::translate(model, glm::vec3(0, 0.0, 2.2));
+	model = glm::translate(model, glm::vec3(2.2, 0.0, 0));
 	model = glm::rotate(model, glm::radians(-25.0f), glm::vec3(0, 1, 0));
-	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.0, 2.2));
+	model = glm::translate(model, glm::vec3(2.2, 0.0, 0));
 	model = glm::rotate(model, glm::radians(-20.0f), glm::vec3(0, 1, 0));
-	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
 	//primera
-	model = glm::translate(model, glm::vec3(0, -0.2, 4.5));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 3.0f));
-	model = glm::rotate(model, glm::radians(10.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(4.5, -0.2, 0));
+	model = glm::scale(model, glm::vec3(3.0f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model);
 
 	for (int i = 0; i < 8; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, 3.14));
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
 	//giro para segunda caida
 	for (int i = 0; i < 10; i++) {
-		model = glm::translate(model, glm::vec3(-0.4, -0.2, 2.0));
-		model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
+		model = glm::translate(model, glm::vec3(2.0, -0.2, 0.4));
+		model = glm::rotate(model, glm::radians(2.0f), glm::vec3(0, 0, 1));
 		model = glm::rotate(model, glm::radians(-18.0f), glm::vec3(0, 1, 0));
 		if (i > 6) {
-			model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
+			model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
 			model = glm::translate(model, glm::vec3(0.0, -0.3, 0.0));
 		}
 		//model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1, 0, 0));
@@ -578,14 +576,14 @@ void Cilindro::roller_coaster()
 	}
 
 	//segunda
-	model = glm::translate(model, glm::vec3(0, -0.2, 2.2));
+	model = glm::translate(model, glm::vec3(2.2, -0.2, 0));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
-	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
-	for (int i = 0; i < 9; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, 3.14));
+	for (int i = 0; i < 8; i++) {
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
@@ -594,12 +592,12 @@ void Cilindro::roller_coaster()
 	projectionShader.setMat4("model", model);
 	//giro para tercera y ultima caida
 	for (int i = 0; i < 10; i++) {
-		model = glm::translate(model, glm::vec3(0.5, -0.1, 2.5));
-		model = glm::rotate(model, glm::radians(-2.0f), glm::vec3(1, 0, 0));
+		model = glm::translate(model, glm::vec3(2.2, -0.1, -0.5));
+		model = glm::rotate(model, glm::radians(2.0f), glm::vec3(0, 0, 1));
 		model = glm::rotate(model, glm::radians(18.0f), glm::vec3(0, 1, 0));
 		if (i > 5) {
-			model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
-			model = glm::translate(model, glm::vec3(0.0, -0.2, 0.3));
+			model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
+			model = glm::translate(model, glm::vec3(0.0, -0.2, 0));
 		}
 		//model = glm::rotate(model, glm::radians(20.0f), glm::vec3(1, 0, 0));
 		projectionShader.setMat4("model", model);
@@ -607,11 +605,13 @@ void Cilindro::roller_coaster()
 	}
 	
 	//tercera
-	model = glm::translate(model, glm::vec3(0, -0.4, 3.6));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.5f));
-	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(3.1, -0.4, 0));
+	model = glm::scale(model, glm::vec3(1.5f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
+
+
 
 	//model = glm::translate(model, glm::vec3(0, -0.4, 2.2));
 	//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
@@ -619,43 +619,43 @@ void Cilindro::roller_coaster()
 	//projectionShader.setMat4("model", model);
 	//Cilindro::riel(model);
 
-	for (int i = 0; i < 3; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, 3.14));
+	for (int i = 0; i < 4; i++) {
+		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
-	model = glm::translate(model, glm::vec3(0, 0.2, 1.9));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 0.1f));
-	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(1.9, 0.2, 0));
+	model = glm::scale(model, glm::vec3(0.1f, 1.0f, 1.0f));
+	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
-	model = glm::translate(model, glm::vec3(0, 0.2, 2.3));
-	model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(1, 0, 0));
+	model = glm::translate(model, glm::vec3(2.3, 0.2, 0));
+	model = glm::rotate(model, glm::radians(15.0f), glm::vec3(0, 0, 1));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
 	//giro para cierre del camino
 	for (int i = 0; i <7; i++) {
-		model = glm::translate(model, glm::vec3(-0.2, 0, 1.9));
+		model = glm::translate(model, glm::vec3(1.9, 0, 0.2));
 		model = glm::rotate(model, glm::radians(-15.5f), glm::vec3(0, 1, 0));
-		model = glm::rotate(model, glm::radians(-0.8f), glm::vec3(0, 0, 1));
+		model = glm::rotate(model, glm::radians(-0.8f), glm::vec3(1, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
 
 
-	model = glm::translate(model, glm::vec3(-0.2, 0.0, 1.9));
-	model = glm::scale(model, glm::vec3(1.2f, 1.0f, 2.5f));
+	model = glm::translate(model, glm::vec3(1.9, 0.0, 0.2));
+	model = glm::scale(model, glm::vec3(2.5f, 1.0f, 1.2f));
 	model = glm::rotate(model, glm::radians(-0.2f), glm::vec3(0, 1, 0));
-	model = glm::rotate(model, glm::radians(-5.0f), glm::vec3(0, 0, 1));
+	model = glm::rotate(model, glm::radians(-5.0f), glm::vec3(1, 0, 0));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
-	for (int i = 0; i < 7; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0.0, 3.14));
+	for (int i = 0; i < 2; i++) {
+		model = glm::translate(model, glm::vec3(3.14, 0.0, 0));
 		//model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0, 1, 0));
 		//model = glm::rotate(model, glm::radians(5.5f), glm::vec3(0, 0, 1));
 		projectionShader.setMat4("model", model);
@@ -666,44 +666,44 @@ void Cilindro::roller_coaster()
 	//camino de regreso al inicio
 	model = temp04;
 
-	for (int i = 0; i < 2; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, -3.14));
+	for (int i = 0; i < 3; i++) {
+		model = glm::translate(model, glm::vec3(-3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
 	//giro
 	for (int i = 0; i < 5; i++) {
-		model = glm::translate(model, glm::vec3(-0.3, 0.0, -2.2));
+		model = glm::translate(model, glm::vec3(-2.2, 0.0, 0.3));
 		model = glm::rotate(model, glm::radians(18.0f), glm::vec3(0, 1, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
-	model = glm::translate(model, glm::vec3(0.0, 0, -4.6));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
+	model = glm::translate(model, glm::vec3(-4.6, 0, 0));
+	model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
 
-	for (int i = 0; i < 6; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, -3.14));
+	for (int i = 0; i < 7; i++) {
+		model = glm::translate(model, glm::vec3(-3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
 	for (int i = 0; i < 5; i++) {
-		model = glm::translate(model, glm::vec3(-0.3, 0.0, -2.2));
+		model = glm::translate(model, glm::vec3(-2.2, 0.0, 0.3));
 		model = glm::rotate(model, glm::radians(18.0f), glm::vec3(0, 1, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
 
-	model = glm::translate(model, glm::vec3(0.0, 0, -4.6));
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 2.0f));
+	model = glm::translate(model, glm::vec3(-4.6, 0, 0));
+	model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model);
-	for (int i = 0; i < 19; i++) {
-		model = glm::translate(model, glm::vec3(0.0, 0, -3.14));
+	for (int i = 0; i < 21; i++) {
+		model = glm::translate(model, glm::vec3(-3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model);
 	}
