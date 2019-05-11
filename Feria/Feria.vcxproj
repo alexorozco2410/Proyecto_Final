@@ -132,6 +132,26 @@
     <ClInclude Include="cilindro.h" />
     <ClInclude Include="esfera.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\modelLoading.fs" />
+    <None Include="Shaders\modelLoading.vs" />
+    <None Include="Shaders\shader.fs" />
+    <None Include="Shaders\shader.vs" />
+    <None Include="Shaders\shader_lamp.fs" />
+    <None Include="Shaders\shader_lamp.vs" />
+    <None Include="Shaders\shader_light.fs" />
+    <None Include="Shaders\shader_light.vs" />
+    <None Include="Shaders\shader_projection.fs" />
+    <None Include="Shaders\shader_projection.vs" />
+    <None Include="Shaders\shader_texture.fs" />
+    <None Include="Shaders\shader_texture.vs" />
+    <None Include="Shaders\shader_texture_light_dir.fs" />
+    <None Include="Shaders\shader_texture_light_dir.vs" />
+    <None Include="Shaders\shader_texture_light_pos.fs" />
+    <None Include="Shaders\shader_texture_light_pos.vs" />
+    <None Include="Shaders\shader_texture_light_spot.fs" />
+    <None Include="Shaders\shader_texture_light_spot.vs" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

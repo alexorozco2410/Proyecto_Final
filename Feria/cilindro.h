@@ -19,8 +19,8 @@ public:
 	void init();
 	//void load();
 	void render();
-	void riel(glm::mat4 model);
-	void roller_coaster();
+	void riel(glm::mat4 model, Shader projectionShader);
+	void roller_coaster(Shader projectionShader);
 	virtual ~Cilindro();
 
 private:

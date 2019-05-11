@@ -1,0 +1,25 @@
+# Blender MTL File: 'dardos.blend'
+# Material Count: 2
+
+newmtl 07___Default
+Ns 9.803922
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.090000 0.090000 0.090000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd DartBoard_V4_L3.123c95398306-e296-4b4a-9dd4-b38ee18a57e3\dartboard.jpg
+map_Ka DartBoard_V4_L3.123c95398306-e296-4b4a-9dd4-b38ee18a57e3\\dartboard.jpg
+
+newmtl Material
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd madera_base.jpg
