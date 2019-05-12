@@ -1,8 +1,0 @@
-﻿  main_prac08.cpp
-c:\users\sandra\documents\alexisorozco\semestre 2019-2\lab cg\practicas_vs\practicas\practicas\cilindro.h(13): warning C4005: 'MERIDIANOS': redefinición de macro
-  c:\users\sandra\documents\alexisorozco\semestre 2019-2\lab cg\practicas_vs\practicas\practicas\esfera.h(16): note: vea la definición anterior de 'MERIDIANOS'
-c:\users\sandra\documents\alexisorozco\semestre 2019-2\lab cg\practicas_vs\practicas\practicas\cilindro.h(14): warning C4005: 'PARALELOS': redefinición de macro
-  c:\users\sandra\documents\alexisorozco\semestre 2019-2\lab cg\practicas_vs\practicas\practicas\esfera.h(17): note: vea la definición anterior de 'PARALELOS'
-c:\users\sandra\documents\alexisorozco\semestre 2019-2\lab cg\practicas_vs\practicas\practicas\main_prac08.cpp(332): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-c:\users\sandra\documents\alexisorozco\semestre 2019-2\lab cg\practicas_vs\practicas\practicas\main_prac08.cpp(339): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-  practicas.vcxproj -> C:\Users\Sandra\Documents\Alexisorozco\Semestre 2019-2\LAB CG\Practicas_VS\practicas\Debug\practicas.exe
