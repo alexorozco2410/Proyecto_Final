@@ -22,10 +22,11 @@
 #include "stb_image.h"
 //#include "toroide.h"
 //#include "cilindro.h"
-
+//#include "canasta.h"
 //Cilindro my_cylinder(1.0);
 //Toroide my_toroide(1.0);
 Esfera my_sphere(1.0f);
+//Canasta my_canasta(1.0f);
 
 void resize(GLFWwindow* window, int width, int height);
 void my_input(GLFWwindow *window);
@@ -166,12 +167,12 @@ void LoadTextures() //carga de todas las texturas
 	t_caja = generateTextures("Texturas/caja.png", 1);
 	t_caja_brillo = generateTextures("Texturas/caja_specular.png", 1);
 	madera = generateTextures("Texturas/madera.jpg", 0);
-	frontal = generateTextures("Texturas/t4.jpg", 0);
-	trasera = generateTextures("Texturas/t1.jpg", 0);
-	superior= generateTextures("Texturas/t7.jpg", 0);
-	inferior = generateTextures("Texturas/t8.jpg", 0);
-	derecho = generateTextures("Texturas/t3.jpg", 0);
-	izquierdo = generateTextures("Texturas/t2.jpg", 0);
+	frontal = generateTextures("Texturas/frontal.jpg", 0);
+	trasera = generateTextures("Texturas/trasera.jpg", 0);
+	superior= generateTextures("Texturas/techo.jpg", 0);
+	inferior = generateTextures("Texturas/suelo.jpg", 0);
+	derecho = generateTextures("Texturas/derecha.jpg", 0);
+	izquierdo = generateTextures("Texturas/izquierda.jpg", 0);
 	brillo = generateTextures("Texturas/brillo.jpg", 0);
 	fSuperior = generateTextures("Texturas/BibliotecaFrente.jpg", 0);
 	sky = generateTextures("Texturas/sky.jpg", 0);
@@ -219,37 +220,37 @@ void myData()
 		//////Segunda caja
 		//Position			  //Normals			   //Texture Coords
 		//Trasera
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.25f,  0.333f,
-		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.5f,  0.333f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.5f,  0.666f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.25f,  0.666f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  1.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.0f,  1.0f,
 		//Frontal
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  1.0f,  0.333f,
-		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  0.75f,  0.333f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  0.75f,  0.666f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  1.0f,  0.666f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  1.0f,  1.0f,
 
 		//Izquierda
-		-0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  0.25f,  0.333f,
-		-0.5f, -0.5f,  0.5f, 1.0f,  0.0f,  0.0f,  0.0f,  0.333f,
-		-0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,  0.0f,  0.666f,
-		-0.5f,  0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  0.25f,  0.666f,
+		-0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
 		
 		//Derecha
-		0.5f,  -0.5f,   0.5f,  -1.0f,  0.0f,  0.0f,  0.75f,  0.333f,
-		0.5f,	0.5f,	0.5f,  -1.0f,  0.0f,  0.0f,  0.75f,  0.666f,
-		0.5f,   0.5f,  -0.5f,  -1.0f,  0.0f,  0.0f,  0.5f,  0.666f,
-		0.5f,  -0.5f,  -0.5f,  -1.0f,  0.0f,  0.0f,  0.5f,  0.333f,
+		0.5f,  -0.5f,   0.5f,  -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		0.5f,	0.5f,	0.5f,  -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+		0.5f,   0.5f,  -0.5f,  -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		0.5f,  -0.5f,  -0.5f,  -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
 		//Inferior
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.25f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.5f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.5f,  0.333f,
-		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.25f,  0.333f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 		//Superior
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.25f, 0.666f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.5f,  0.666f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.5f,  1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.25f,  1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
 
 		/*//Cara de atrás
 		Auxiliar:
@@ -479,7 +480,7 @@ void display(void) //En esta funcion jugamos con todas las luces, a cada tipo de
 	de codigo.*/
 
 	//--------------------Sky Box--------------------
-	lightingShader.setInt("material_diffuse", sky);//parte trasera
+	lightingShader.setInt("material_diffuse", trasera);//parte trasera
 	//glDrawArrays(GL_QUADS, 24, 4);
 
 	for (int i = 0; i < 4; i++)
@@ -489,39 +490,39 @@ void display(void) //En esta funcion jugamos con todas las luces, a cada tipo de
 	
 
 	//lightingShader.setMat4("model", model);
-	lightingShader.setInt("material_diffuse", sky);//Parte frontal
+	lightingShader.setInt("material_diffuse", frontal);//Parte frontal
 	//glDrawArrays(GL_QUADS, 28, 4);
 	for (int i = 0; i < 4; i++)
 	{
 		glDrawArrays(GL_TRIANGLE_FAN, 28, i + 1);
 	}
 	//lightingShader.setMat4("model", model);
-	lightingShader.setInt("material_diffuse", sky);//parte inferior
+	lightingShader.setInt("material_diffuse", inferior);//parte inferior
 	//glDrawArrays(GL_QUADS, 40, 4);
 	for (int i = 0; i < 4; i++)
 	{
 		glDrawArrays(GL_TRIANGLE_FAN, 40, i + 1);
 	}
 	//lightingShader.setMat4("model", model);
-	lightingShader.setInt("material_diffuse", sky);//parte superior
+	lightingShader.setInt("material_diffuse", superior);//parte superior
 	//glDrawArrays(GL_QUADS, 44, 4);
 	for (int i = 0; i < 4; i++)
 	{
 		glDrawArrays(GL_TRIANGLE_FAN, 44, i + 1);
 	}
 	//lightingShader.setMat4("model", model);
-	lightingShader.setInt("material_diffuse", sky);
+	lightingShader.setInt("material_diffuse", izquierdo);//parte izquierda
 	/*Como aqui queremos agregar el material especular se lo pasamos al shader y como parametros nuestra textura 
 	que sera el especular, en esta parte en especifico lo tendral los dos costados, por lo que solo pasamos como parametro y 
 	dibujamos*/
-	lightingShader.setInt("material_specular", sky);
+	lightingShader.setInt("material_specular", izquierdo);
 	//glDrawArrays(GL_QUADS, 32, 4);
 	for (int i = 0; i < 4; i++)
 	{
 		glDrawArrays(GL_TRIANGLE_FAN, 32, i + 1);
 	}
 
-	lightingShader.setInt("material_diffuse", sky);
+	lightingShader.setInt("material_diffuse", derecho);
 	lightingShader.setInt("material_specular", brillo);
 	//glDrawArrays(GL_QUADS, 36, 4);
 	for (int i = 0; i < 4; i++)
@@ -578,8 +579,55 @@ void display(void) //En esta funcion jugamos con todas las luces, a cada tipo de
 	lightingShader.setMat4("model", model);
 	lightingShader.setInt("material_diffuse", t_toalla);
 	glDrawArrays(GL_QUADS, 0, 24);*/
+	textureShader.use();
+	textureShader.setInt("texture1", 3);
+	glBindVertexArray(VAO);
+
+/*
+	//lightingShader.setInt("material_diffuse", t_unam);
+	model = glm::mat4(1.0f);
+	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+	model = glm::translate(model, glm::vec3(4.5f, 1.0f, 1.0f));
+	model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
+	temp01 = model;
+	model = glm::scale(model, glm::vec3(0.1f, 1.2f, 0.1f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1, 0, 0));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
+	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
+	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	view = camera.GetViewMatrix();
+	textureShader.setVec3("viewPos", camera.Position);
+	textureShader.setMat4("model", model);
+	textureShader.setMat4("view", view);
+	textureShader.setMat4("projection", projection);
+
+	my_canasta.riel(model, VBO, VAO, EBO);
+
+	if (luz == 0) {
+		//Shader lightingShader("shaders/shader_texture_light_spot.vs", "shaders/shader_texture_light_spot.fs"); //Spotlight
+		lightingShader.use();
+		lightingShader.setVec3("light.position", camera.Position);
+		lightingShader.setVec3("light.direction", camera.Front);
+		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+
+	}
+	if (luz == 1) {//direcional adelante
+
+		lightingShader.use();
+		lightingShader.setVec3("light.direction", lightDirection);
+		lightingShader.setVec3("light.position", lightPosition);
 
 
+	}
+	if (luz == 2) {
+		lightingShader.use();
+		//lightingShader.setVec3("light.position", lightPosition);
+		lightingShader.setVec3("light.direction", lightDirection);
+
+	}*/
+
+	glBindVertexArray(VAO);
 	//Light
 	lampShader.use();
 	lampShader.setMat4("projection", projection);
@@ -639,6 +687,7 @@ int main()
 	LoadTextures();
 	myData();
 	my_sphere.init();
+	//my_canasta.init();
 	//my_cylinder.init();
 	//my_toroide.init();
 	glEnable(GL_DEPTH_TEST);
