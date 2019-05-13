@@ -123,14 +123,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="canasta.cpp" />
     <ClCompile Include="cilindro.cpp" />
     <ClCompile Include="esfera.cpp" />
     <ClCompile Include="Feria.cpp" />
+    <ClCompile Include="rueda.cpp" />
+    <ClCompile Include="toroide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="canasta.h" />
     <ClInclude Include="cilindro.h" />
     <ClInclude Include="esfera.h" />
+    <ClInclude Include="rueda.h" />
+    <ClInclude Include="toroide.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\modelLoading.fs" />

@@ -19,12 +19,18 @@
 #include <time.h>
 #include <math.h>
 
+#include "canasta.h"
+#include "rueda.h"
+
+
 //para activar la animacion se usa la tecla P y para detenerla se usa la tecla O
 
 // Other Libs
 #include "SOIL2/SOIL2.h" //ayuda a cargar los modelos
 
 Cilindro my_cilynder(1.0);
+Canasta my_canasta(1.0f);
+Rueda my_rueda(1.0f);
 
 void resize(GLFWwindow* window, int width, int height);
 void my_input(GLFWwindow *window);
@@ -39,8 +45,16 @@ int SCR_HEIGHT = 7600;
 GLFWmonitor *monitors;
 GLuint VBO, VAO, EBO;
 
+float ambient1 = 1.0f;
+float ambient2 = 1.0f;
+float ambient3 = 1.0f;
+
 //Camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+
+float x_camera = 0.0f,
+y_camera = 0.0f,
+z_camera = 0.10f;
+Camera camera(glm::vec3(x_camera, y_camera, z_camera));
 double	lastX = 0.0f,
 lastY = 0.0f;
 bool firstMouse = true;
@@ -50,13 +64,13 @@ double	deltaTime = 0.0f,
 lastFrame = 0.0f;
 
 //Lighting
-glm::vec3 lightPosition(0.0f, 3.0f, 0.0f);
-glm::vec3 lightDirection(0.0f, 0.0f, -70.0f);
+glm::vec3 lightPosition(0.0f, 20.0f, 0.0f);
+glm::vec3 lightDirection(0.0f, -0.0f, -10.0f);
 
 void myData(void);
 void display(Shader, Model, Model);
 void getResolution(void);
-void animate(void);
+//void animate(void);
 void LoadTextures(void);
 unsigned int generateTextures(char*, bool);
 
@@ -64,20 +78,36 @@ unsigned int generateTextures(char*, bool);
 float	movX = 0.0f,
 movY = 0.0f,
 movZ = -5.0f,
-rot_personaje = 0.0f,
 rotX = 0.0f;
 
 //Texture
 unsigned int	t_smile,
 t_toalla,
 t_unam,
-t_white,
-t_panda,
-t_cubo,
 t_caja,
+t_coaster,
+sky,
+frontal,
+trasera,
+superior,
+inferior,
+derecho,
+brillo,
+izquierdo,
 t_caja_brillo;
 
 //For model
+
+//---------personaje con movimiento------------
+float x_personaje = -30.0f,
+y_personaje = 5.6f,
+z_personaje = 0.0f,
+rot_personaje = 0.0f,
+rot_piernaDer = 0.0f,
+rot_piernaIzq = 0.0f;
+
+//--------------------------------------------
+
 //----------para tasas giratorias------------
 float rot_tasas = 0.0f;
 float rot_base_tasas = 0.0f;
@@ -100,6 +130,7 @@ int avanzar = 0;
 int mov1[20] = { 0,2,1,3,2,0,2,3,1,2,3,1,0,2,0,3,2,1,2,0 };
 bool stop_cart1 = true;
 bool ac_cart1 = false;
+int tiempo_bumper1 = 0;
 
 //carro 2
 float x_cart2 = -30.0f;
@@ -111,6 +142,7 @@ int estado_cart2 = 0;
 int mov2[20] = { 1,0,3,1,2,0,0,3,1,1,3,2,1,1,3,2,1,0,0,3 };
 bool stop_cart2 = true;
 bool ac_cart2 = false;
+int tiempo_bumper2 = 0;
 
 //carro 3
 float x_cart3 = 30.0f;
@@ -122,6 +154,7 @@ int estado_cart3 = 2;
 int mov3[20] = { 2,0,1,3,3,1,0,0,2,3,0,0,2,1,1,0,3,3,1,2 };
 bool stop_cart3 = true;
 bool ac_cart3 = false;
+int tiempo_bumper3 = 0;
 
 int aux = 0;
 int aux_ac;
@@ -157,10 +190,26 @@ float y_caballos = 5.5f;
 bool up_caballos = false;
 //-----------------------------------------------------
 
-float movKit_z = -15.0f;
-float movKit_x = -4.0f;
 
-float rot_llanta = 0.0f;
+//-----para la rueda-----
+float angRotPuerta = 0.0f;
+float rotaRueda = 0.0f;
+float	sol = 0.0f,
+year = 0.0f,
+day = 0.0f,
+moon = 0.0f,
+mars_year = 0.0f,
+jupiter_year = 0.0f,
+venus = 0.0f,
+tierra = 0.00,
+marte = 0.0f,
+jupiter = 0.0f,
+saturno = 0.0f,
+urano = 0.0f,
+neptuno = 0.0f;
+float bandera = 0.2;
+bool activate_rueda = false;
+//------------------------
 
 bool play = false;
 bool direction_right = true;
@@ -225,7 +274,14 @@ void LoadTextures()
 {
 	t_unam = generateTextures("Texturas/escudo_unam.png", 1);
 	t_caja_brillo = generateTextures("Texturas/caja_specular.png", 1);
-
+	t_coaster = generateTextures("Texturas/bluemetal.jpg", 0);
+	frontal = generateTextures("Texturas/frontal.jpg", 0);
+	trasera = generateTextures("Texturas/trasera.jpg", 0);
+	superior = generateTextures("Texturas/techo.jpg", 0);
+	inferior = generateTextures("Texturas/suelo.jpg", 0);
+	derecho = generateTextures("Texturas/derecha.jpg", 0);
+	izquierdo = generateTextures("Texturas/izquierda.jpg", 0);
+	brillo = generateTextures("Texturas/brillo.jpg", 0);
 }
 
 void myData()
@@ -261,6 +317,43 @@ void myData()
 		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
 		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
 		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+
+		//////Segunda caja
+		//Position			  //Normals			   //Texture Coords
+		//Trasera
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  1.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, 1.0f,  0.0f,  1.0f,
+		//Frontal
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  -1.0f,  1.0f,  1.0f,
+
+		//Izquierda
+		-0.5f, -0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f, 1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, 1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f, 1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+
+		//Derecha
+		0.5f,  -0.5f,   0.5f,  -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		0.5f,	0.5f,	0.5f,  -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+		0.5f,   0.5f,  -0.5f,  -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		0.5f,  -0.5f,  -0.5f,  -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+		//Inferior
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+		//Superior
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+
+
 
 
 		//////Segunda caja
@@ -356,9 +449,10 @@ void choque(float *x1, float *y1, bool *stop1, bool *ac_c1, float *x2, float *y2
 }
 
 
-void animate_bumper(float *x, float *y, float *rot, int *estado_cart, int mov[], bool *stop) {
+void animate_bumper(float *x, float *y, float *rot, int *estado_cart, int mov[], bool *stop, int *tiempo) {
 	//int aux = 1;
 	if (*stop == false) {
+		*tiempo += 1;
 		//estado_cart = aleatorio();
 		if (*estado_cart == 0) {//movimiento hacia adelante
 			*rot = 90.0f;
@@ -411,6 +505,10 @@ void animate_bumper(float *x, float *y, float *rot, int *estado_cart, int mov[],
 		if (aux >= 19) {
 			aux = 0;
 		}
+		if (*tiempo == 65) {
+			*stop = true;
+			*tiempo = 0;
+		}
 	}
 }
 
@@ -456,70 +554,6 @@ void animate_cc(void) {
 	}
 }
 
-
-void animate(void)//para personaje
-{
-	if (play) {
-		if (movKit_z >= 20.0f && rot_personaje >= 180) {
-			direction_right = false;
-			stop = false;
-		}
-
-		if (movKit_z <= -17.0f && rot_personaje >= 360) {
-			direction_right = true;
-			stop = false;
-			rot_personaje = 0.0f;
-		}
-
-		if (direction_right && !stop) {
-			movKit_z += 0.04f; //para mover o detener el carro_ iniciar i detener la animacion
-		}
-		if (!direction_right && !stop) {
-			movKit_z -= 0.04f; //para mover o detener el carro_ iniciar i detener la animacion
-		}
-		if (movKit_z <= -17.0f) {
-			stop = true;
-			//direction_right = true;
-		}
-		if (movKit_z >= 20.0f) {
-			stop = true;
-			//direction_right = false;
-		}
-
-		//esta parte hace que gire y cambie de carril el personaje
-		if (stop && direction_right && (rot_personaje <= 90.0f)) {
-			rot_personaje += 0.8f;
-			direction_front = true;
-		}
-
-		if (direction_front && rot_personaje >= 90.0f && movKit_x < 4.0f) {
-			movKit_x += 0.04f;
-		}
-
-		if (direction_front && rot_personaje <= 180.0f && movKit_x >= 4.0f) {
-			rot_personaje += 0.8f;
-
-		}
-		//hasta aqui media vuelta, ya regresa
-
-		//esta parte hace que gire y cambie otra vez de carril, a donde comenzo
-		if (stop && !direction_right && (rot_personaje <= 270.0f)) {
-			rot_personaje += 0.8f;
-			direction_front = false;
-		}
-
-		if (!direction_front && rot_personaje >= 270.0f && movKit_x > -4.0f) {
-			movKit_x -= 0.04f;
-		}
-
-		if (!direction_front && (rot_personaje <= 360.0f && rot_personaje != 0.0f) && movKit_x <= -4.0f) {
-			rot_personaje += 0.8f;
-
-		}
-
-	}
-
-}
 
 void animate_horse(void) {
 	if (activate_caballos) {
@@ -582,10 +616,12 @@ void animated_tasas(void) {
 	}
 }
 
+
+
 //-------------------------animacion por keyframes----------------------------------------------
 
 #define MAX_FRAMES 60 //numero maximo de keyframes se puede modificar
-int i_max_steps = 15; //intervalo entre cvada uno de los keyframes (interpolacion)
+int i_max_steps = 7; //intervalo entre cvada uno de los keyframes (interpolacion)
 int i_curr_steps = 0; //indice para saber en que keyframe estamos
 typedef struct _frame //definicion de la estructura
 {
@@ -655,48 +691,6 @@ void setFrame(void) {
 
 
 
-/*
-void setFrame(void) //pasa los datos a la estructura
-{
-
-	printf("frameindex %d\n", FrameIndex);//primera parte
-
-	KeyFrame[FrameIndex].x_coaster_cart = 45.0; //pasa las posiciones por cada estado (guarda el estado del monito)
-	KeyFrame[FrameIndex].y_coaster_cart = 5.5;
-	KeyFrame[FrameIndex].z_coaster_cart = -34.5;
-
-	KeyFrame[FrameIndex].rotx_coaster_cart = 0.0;
-	KeyFrame[FrameIndex].roty_coaster_cart = 90.0;
-	KeyFrame[FrameIndex].rotz_coaster_cart = 0.0;
-
-	FrameIndex++;
-
-	printf("frameindex %d\n", FrameIndex);//segunda parte
-
-	KeyFrame[FrameIndex].x_coaster_cart = 53.0; //pasa las posiciones por cada estado (guarda el estado del monito)
-	KeyFrame[FrameIndex].y_coaster_cart = 5.5;
-	KeyFrame[FrameIndex].z_coaster_cart = -34.5;
-
-	KeyFrame[FrameIndex].rotx_coaster_cart = 0.0;
-	KeyFrame[FrameIndex].roty_coaster_cart = 90.0;
-	KeyFrame[FrameIndex].rotz_coaster_cart = 0.0;
-
-	FrameIndex++;
-
-	printf("frameindex %d\n", FrameIndex);//tercera parte
-
-	KeyFrame[FrameIndex].x_coaster_cart = 54.5; //pasa las posiciones por cada estado (guarda el estado del monito)
-	KeyFrame[FrameIndex].y_coaster_cart = 5.5;
-	KeyFrame[FrameIndex].z_coaster_cart = -32.0;
-
-	KeyFrame[FrameIndex].rotx_coaster_cart = 0.0;
-	KeyFrame[FrameIndex].roty_coaster_cart = 0.0;
-	KeyFrame[FrameIndex].rotz_coaster_cart = 0.0;
-
-	FrameIndex++;
-}
-*/
-
 
 void resetElements(void)//coloca la animacion al inicio
 {
@@ -756,9 +750,36 @@ void animate_coaster(void) {
 	}
 }
 
+
+//rueda de la fortuna
+void animate(void)
+{
+	if (activate_rueda) {
+		sol += 0.1f;
+		rotaRueda += 0.4f;
+		venus += 0.35f;
+		tierra += 0.3f;
+		marte += 0.25f;
+		jupiter += 0.2f;
+		saturno += 0.15f;
+		urano += 0.1f;
+		neptuno += 0.05f;
+
+		angRotPuerta = angRotPuerta + bandera;
+		if (angRotPuerta >= 0)
+		{
+			bandera = -0.5;
+		}
+		if (angRotPuerta <= -45)
+		{
+			bandera = 0.5;
+		}
+	}
+}
+
 //------------------------------------------animacion por keyframes-------------------------------------------------------------
 
-void display(Shader shader, Shader lampshader, Shader lightingshader, Shader textureshader,
+void display(Shader shader, Shader lampshader, Shader lightingshader, Shader textureshader, Shader lightposshader,
 	Model carril, Model personaje, Model personaje2, Model futbolito, Model carpa_tasas, Model base_tasas, Model tasa, Model basketball, Model tiro_blanco,
 	Model jugos, Model ambulante1, Model barrera, Model carpa_fut, Model bumper_car, Model pista, Model silla, Model trash, Model trash2, Model poste_luz1, Model arbol1, Model premios,
 	Model toilet, Model base_caballos, Model giro_caballos, Model caballo, Model coaster_cart)//ahora si resiven parametros: shader, carril y personaje
@@ -783,7 +804,7 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 	shader.use();
 
 
-	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
+	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 500.0f);
 	view = camera.GetViewMatrix();
 
 
@@ -799,11 +820,23 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 
 
 	//--------------------barrera para montaña rusa-----------------------------
-	model = glm::translate(tmp, glm::vec3(35.0f, 5.8f, -30.0));
-	model = glm::scale(model, glm::vec3(0.5f, 0.3f, 0.6f));
+	model = glm::translate(tmp, glm::vec3(35.0f, 5.65f, -30.0));
+	model = glm::scale(model, glm::vec3(0.4f, 0.2f, 0.5f));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	//model = glm::rotate(model, glm::radians(rot_llanta), glm::vec3(1.0f, 0.0f, 0.0f));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(-11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(22.8f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
 	shader.setMat4("model", model);
 	barrera.Draw(shader);
 
@@ -867,11 +900,106 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
 	shader.setMat4("model", model);
 	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(6.5f, 0.0f, -5.1));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(6.5f, 0.0f, -5.1));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(11.4f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
+	model = glm::translate(model, glm::vec3(34.2f, 0.0f, 0.0));
+	shader.setMat4("model", model);
+	barrera.Draw(shader);
+
 	//----------------------------------------------------------------------------
 
 	//personaje1
-	model = glm::translate(tmp, glm::vec3(-30.0f, 5.7f, 0.0));
-	model = glm::scale(model, glm::vec3(0.017f, 0.017f, 0.017f));
+	model = glm::translate(tmp, glm::vec3(-30.0f, 5.68f, 0.0));
+	model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
 	//model = glm::rotate(model, glm::radians(rot_personaje), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	//model = glm::rotate(model, glm::radians(rot_llanta), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -879,17 +1007,7 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 	personaje.Draw(shader);	//Izq delantera
 
 	//personaje 2
-	model = glm::translate(tmp, glm::vec3(-10.0f, 5.7f, 40.0));
-	model = glm::scale(model, glm::vec3(0.017f, 0.017f, 0.017f));
-	//model = glm::rotate(model, glm::radians(rot_personaje), glm::vec3(0.0f, 1.0f, 0.0f));
-
-	//model = glm::rotate(model, glm::radians(rot_llanta), glm::vec3(1.0f, 0.0f, 0.0f));
-	shader.setMat4("model", model);
-	personaje2.Draw(shader);
-
-
-
-	model = glm::translate(tmp, glm::vec3(41.5f, 5.7f, -20.0));
+	model = glm::translate(tmp, glm::vec3(-10.0f, 5.68f, 40.0));
 	model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
 	//model = glm::rotate(model, glm::radians(rot_personaje), glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -897,11 +1015,51 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 	shader.setMat4("model", model);
 	personaje2.Draw(shader);
 
+
+
+	model = glm::translate(tmp, glm::vec3(41.5f, 5.68f, -20.0));
+	model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
+	//model = glm::rotate(model, glm::radians(rot_personaje), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	//model = glm::rotate(model, glm::radians(rot_llanta), glm::vec3(1.0f, 0.0f, 0.0f));
+	shader.setMat4("model", model);
+	personaje2.Draw(shader);
+
+	/*
+	//personaje con movimiento
+	model = glm::translate(tmp, glm::vec3(x_personaje, y_personaje, z_personaje));
+	model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
+	model = glm::rotate(model, glm::radians(rot_personaje), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	//model = glm::rotate(model, glm::radians(rot_llanta), glm::vec3(1.0f, 0.0f, 0.0f));
+	shader.setMat4("model", model);
+	cuerpo.Draw(shader);
+	temp2 = model;
+
+	//Pierna Der
+	model = glm::translate(model, glm::vec3(-0.0f, 63.0f, -0.0f));
+	model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 1.0f, 0.0));
+	model = glm::rotate(model, glm::radians(rot_piernaDer), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::translate(model, glm::vec3(0.0f, -60.1f, 0.0f));
+	//model = glm::scale(model, glm::vec3(50000.007f, 50000.007f, 50000.007f));
+	shader.setMat4("model", model);
+	musloDer.Draw(shader);
+
+
+	model = temp2;
+	//Pierna Izq
+	model = glm::translate(model, glm::vec3(0.0f, 63.0f, -0.0f));
+	model = glm::rotate(model, glm::radians(rot_piernaIzq), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::translate(model, glm::vec3(0.0f, -60.05f, 0.0f));
+	shader.setMat4("model", model);
+	musloIzq.Draw(shader);
+	*/
+
 	//futbolitos
 	//-----------------------------------futbolitos-------------------------------------
 	//carpa
-	model = glm::translate(tmp, glm::vec3(-50.0f, 5.5f, -25.0));
-	model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+	model = glm::translate(tmp, glm::vec3(-50.0f, 5.45f, -25.0));
+	model = glm::scale(model, glm::vec3(0.09f, 0.09f, 0.09f));
 	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	shader.setMat4("model", model);
 	carpa_fut.Draw(shader);
@@ -1041,7 +1199,7 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 	//-
 
 	model = glm::translate(model, glm::vec3(80.0f, 2.5f, -50.0));
-	model = glm::scale(model, glm::vec3(1.30f, 1.0f, 1.00f));
+	model = glm::scale(model, glm::vec3(1.20f, 0.9f, 0.90f));
 	//model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	shader.setMat4("model", model);
 	tiro_blanco.Draw(shader);
@@ -1101,7 +1259,7 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 
 	//-------------------carros chocones----------------------------------
 	model = glm::translate(tmp, glm::vec3(10.0f, 5.7f, 45.0));
-	model = glm::scale(model, glm::vec3(0.30f, 0.11f, 0.30f));
+	model = glm::scale(model, glm::vec3(0.3f, 0.1f, 0.3f));
 	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	shader.setMat4("model", model);
@@ -1463,12 +1621,28 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 	glBindTexture(GL_TEXTURE_2D, t_unam);
 	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, t_caja_brillo);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, t_coaster);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_2D, frontal);
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, trasera);
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, superior);
+	glActiveTexture(GL_TEXTURE7);
+	glBindTexture(GL_TEXTURE_2D, inferior);
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_2D, derecho);
+	glActiveTexture(GL_TEXTURE9);
+	glBindTexture(GL_TEXTURE_2D, izquierdo);
+	glActiveTexture(GL_TEXTURE10);
+	glBindTexture(GL_TEXTURE_2D, brillo);
 
 
 	textureshader.use();
-	textureshader.setInt("texture1", 1);
+	textureshader.setInt("texture1", 3);
 	glBindVertexArray(VAO);
-	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
+	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 500.0f);
 	view = camera.GetViewMatrix();
 
 	model = glm::mat4(1.0f);
@@ -1484,6 +1658,170 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 	//my_cilynder.riel(model, textureshader);
 	my_cilynder.roller_coaster(textureshader);
 
+	
+	
+
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	lightingshader.use();
+
+	lightingshader.setVec3("light.position", camera.Position);
+	lightingshader.setVec3("light.direction", camera.Front);
+	lightingshader.setFloat("light.cutOff", glm::cos(glm::radians(10.0f)));
+
+	lightingshader.setVec3("viewPos", camera.Position);
+
+	lightingshader.setVec3("light.ambient", ambient1, ambient2, ambient3);
+	lightingshader.setVec3("light.diffuse", 0.4f, 0.8f, 0.8f);
+	lightingshader.setVec3("light.specular", 0.0f, 0.0f, 2.0f);
+	//For Positional and Spotlight
+	lightingshader.setFloat("light.constant", 1.0f);
+	lightingshader.setFloat("light.linear", 0.009f);
+	lightingshader.setFloat("light.quadratic", 0.0032f);
+
+	// material properties
+	lightingshader.setFloat("material_shininess", 35.0f);
+
+	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 500.0f);
+	view = camera.GetViewMatrix();
+
+	model = glm::mat4(1.0f);
+
+	lightingshader.setMat4("view", view);
+	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+	lightingshader.setMat4("projection", projection);
+	lightingshader.setMat4("model", model);
+
+	glBindVertexArray(VAO);
+
+	model = glm::translate(model, glm::vec3(2.0f, 0.0f, 2.0f));//trasladamos
+	model = glm::scale(model, glm::vec3(300.0f, 200.0f, 300.0f));//escalamos
+	lightingshader.setMat4("model", model);//iniciamos el shader al lugar donde nos trasladamos
+	
+	//--------------------Sky Box--------------------
+	lightingshader.setVec3("ambientColor", 1.0f, 1.0f, 1.0f);
+	lightingshader.setVec3("diffuseColor", 0.8f, 0.8f, 0.8f);
+	lightingshader.setVec3("specularColor", 1.0f, 1.0f, 1.0f);
+	lightingshader.setInt("material_diffuse", 5);//parte trasera
+	lightingshader.setMat4("model", model);
+	//glDrawArrays(GL_QUADS, 24, 4);
+
+	for (int i = 0; i < 4; i++)
+	{
+		glDrawArrays(GL_TRIANGLE_FAN, 24, i + 1);
+	}
+	
+
+	//lightingShader.setMat4("model", model);
+	lightingshader.setInt("material_diffuse", 4);//Parte frontal
+	//glDrawArrays(GL_QUADS, 28, 4);
+	for (int i = 0; i < 4; i++)
+	{
+		glDrawArrays(GL_TRIANGLE_FAN, 28, i + 1);
+	}
+	//lightingShader.setMat4("model", model);
+	lightingshader.setInt("material_diffuse", 7);//parte inferior
+	//glDrawArrays(GL_QUADS, 40, 4);
+	for (int i = 0; i < 4; i++)
+	{
+		glDrawArrays(GL_TRIANGLE_FAN, 40, i + 1);
+	}
+	//lightingShader.setMat4("model", model);
+	lightingshader.setInt("material_diffuse", 6);//parte superior
+	//glDrawArrays(GL_QUADS, 44, 4);
+	for (int i = 0; i < 4; i++)
+	{
+		glDrawArrays(GL_TRIANGLE_FAN, 44, i + 1);
+	}
+	//lightingShader.setMat4("model", model);
+	lightingshader.setInt("material_diffuse", 9);//parte izquierda
+	/*Como aqui queremos agregar el material especular se lo pasamos al shader y como parametros nuestra textura 
+	que sera el especular, en esta parte en especifico lo tendral los dos costados, por lo que solo pasamos como parametro y 
+	dibujamos*/
+	lightingshader.setInt("material_specular", 9);
+	//glDrawArrays(GL_QUADS, 32, 4);
+	for (int i = 0; i < 4; i++)
+	{
+		glDrawArrays(GL_TRIANGLE_FAN, 32, i + 1);
+	}
+
+	lightingshader.setInt("material_diffuse", 8);
+	lightingshader.setInt("material_specular", 10);
+	//glDrawArrays(GL_QUADS, 36, 4);
+	for (int i = 0; i < 4; i++)
+	{
+		glDrawArrays(GL_TRIANGLE_FAN, 36, i + 1);
+	}
+
+	//-----------------Sky box---------------------
+	
+	
+
+	textureshader.use();
+	textureshader.setInt("texture1", 3);
+	glBindVertexArray(VAO);
+	model = glm::mat4(1.0f);
+
+
+	projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 500.0f);
+	view = camera.GetViewMatrix();
+	textureshader.setVec3("viewPos", camera.Position);
+	textureshader.setMat4("model", model);
+	textureshader.setMat4("view", view);
+	textureshader.setMat4("projection", projection);
+
+
+
+	model = glm::translate(model, glm::vec3(-48.0f, 3.5f, 5.0f));
+	model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+	model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	my_rueda.dibujaRueda(3, lightingshader, textureshader, model, VBO, VAO, EBO, rotaRueda, angRotPuerta);
+
+	lampshader.use();
+
+	lampshader.setMat4("projection", projection);
+	lampshader.setMat4("view", view);
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, lightPosition);
+	model = glm::scale(model, glm::vec3(0.25f));
+	lampshader.setMat4("model", model);
+
+/*
+	lightposshader.use();
+	glBindVertexArray(VAO);
+	lightposshader.setVec3("light.position", glm::vec3(0.0f, 10.0f, 0.0f));
+	lightposshader.setVec3("viewPos", camera.Position);
+	lightposshader.setVec3("light.ambient", 0.9f, 0.9f, 0.9f);
+	lightposshader.setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
+	lightposshader.setVec3("light.specular", 10.0f, 10.0f, 10.0f);
+	//For Positional and Spotlight
+	lightposshader.setFloat("light.constant", 1.0f);
+	lightposshader.setFloat("light.linear", 0.09f);
+	lightposshader.setFloat("light.quadratic", 0.032f);
+
+	// material properties
+	lightposshader.setFloat("material_shininess", 32.0f);
+	model = glm::mat4(1.0f);
+	lightposshader.setMat4("model", model);
+	lightposshader.setMat4("view", view);
+	// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+	lightposshader.setMat4("projection", projection);
+
+	model = glm::translate(model, glm::vec3(-30.0f, 5.0f, 0.0f));
+	model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+	lightposshader.setMat4("model", model);
+	lightposshader.setInt("material_diffuse", 1);
+	glDrawArrays(GL_QUADS, 0, 24);
+	*/
 }
 
 int main()
@@ -1528,6 +1866,8 @@ int main()
 	//LoadTextures();
 	myData();
 	my_cilynder.init();
+	my_canasta.init();
+	my_rueda.init();
 	glEnable(GL_DEPTH_TEST);
 
 	//esta parte es la carga del shader que antes se hacia en display
@@ -1535,7 +1875,7 @@ int main()
 	Shader lampShader("shaders/shader_lamp.vs", "shaders/shader_lamp.fs");//para la luz
 	Shader lightingShader("shaders/shader_texture_light_spot.vs", "shaders/shader_texture_light_spot.fs"); //Spotlight(luz de reflector)
 	Shader projectionShader("shaders/shader_texture.vs", "shaders/shader_texture.fs");
-
+	Shader lightposShader("shaders/shader_texture_light_pos.vs", "shaders/shader_texture_light_pos.fs");
 	//esto se cambia porque asi el shader se carga un avez y antes se cargaba multiples veces, a cada rato se dibujaba el frame
 	//ahora como son modelos muy robustos con demasiados vertices  eso lo haria demasiado lento
 
@@ -1569,7 +1909,14 @@ int main()
 	Model giro_caballos = ((char *)"Models/caballos/c_giratorio.obj");
 	Model caballo = ((char *)"Models/caballos/caballo.obj");
 	
+	//Model cuerpo = ((char *)"Models/hombre/superior.obj");
+	//Model musloDer = ((char *)"Models/hombre/piernader.obj");
+	//Model musloIzq = ((char *)"Models/hombre/piernaizq.obj");
+
 	Model coaster_cart = ((char *)"Models/coaster_cart/coaster_cart.obj");
+
+	//personaje por partes
+	
 
 	LoadTextures();//carga las texturas a utilizar
 
@@ -1591,7 +1938,7 @@ int main()
 		KeyFrame[i].rotzInc_coaster_cart = 0;
 	}
 
-	setFrame();
+	setFrame();//lee el archivo con los frames de la montaña rusa
 
 
 	//----------------------------------------------------------------------
@@ -1613,23 +1960,28 @@ int main()
 		// input
 		// -----
 		my_input(window);
-		animate();
+		//animate();
 		animated_tasas();
 		animate_cc();
-		animate_bumper(&x_cart, &y_cart, &rot_cart, &estado_cart1, mov1, &stop_cart1);
+		animate_bumper(&x_cart, &y_cart, &rot_cart, &estado_cart1, mov1, &stop_cart1, &tiempo_bumper1);
 		choque(&x_cart, &y_cart, &stop_cart1, &ac_cart1, &x_cart2, &z_cart2, &stop_cart2, &ac_cart2, &x_cart3, &z_cart3, &stop_cart3, &ac_cart3);
 		accidente(&ac_cart1, &x_cart, &y_cart, &z_cart, &rot_cart, &rot_cart_z);
-		animate_bumper(&x_cart2, &z_cart2, &rot_cart2, &estado_cart2, mov2, &stop_cart2);
-		animate_bumper(&x_cart3, &z_cart3, &rot_cart3, &estado_cart3, mov3, &stop_cart3);
+		animate_bumper(&x_cart2, &z_cart2, &rot_cart2, &estado_cart2, mov2, &stop_cart2, &tiempo_bumper2);
+		animate_bumper(&x_cart3, &z_cart3, &rot_cart3, &estado_cart3, mov3, &stop_cart3, &tiempo_bumper3);
 
 		animate_horse();
 		animate_coaster();
+
+
+		animate();//rueda de la fortuna
+
+
 		// render
 		// Backgound color
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		display(modelShader, lampShader, lightingShader, projectionShader, carril, personaje, personaje2, futbolito, carpa_tasas, base_tasas, tasa, basketball, tiro_blanco, jugos, ambulante1, barrera, carpa_fut, bumper_car,
+		display(modelShader, lampShader, lightingShader, projectionShader, lightposShader, carril, personaje, personaje2, futbolito, carpa_tasas, base_tasas, tasa, basketball, tiro_blanco, jugos, ambulante1, barrera, carpa_fut, bumper_car,
 			pista, silla, trash, trash2, poste_luz1, arbol1, premios, toilet, base_caballos, giro_caballos, caballo, coaster_cart);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -1654,8 +2006,9 @@ void my_input(GLFWwindow *window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		camera.ProcessKeyboard(FORWARD, (float)deltaTime);
+	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		camera.ProcessKeyboard(BACKWARD, (float)deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -1670,11 +2023,22 @@ void my_input(GLFWwindow *window)
 		direction_right = true;
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		direction_right = false;*/
-
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {//poner de noche
+		ambient1 = 0.04f;
+		ambient2 = 0.04f;
+		ambient3 = 0.04f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {//poner de dia
+		ambient1 = 1.0f;
+		ambient2 = 1.0f;
+		ambient3 = 1.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)//PARA ACTIVAR LA NIMACION DE LA RUEDA
+		activate_rueda = true;
 		//----------para tasas giratorias
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)//activar taas
 		activate_tasas = true;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)//descativar tasas
 		activate_tasas = false;
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)//para activar el carro de comida
 		activate_cc = true;
@@ -1715,18 +2079,18 @@ void my_input(GLFWwindow *window)
 		aux_ac;
 
 	}
-	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {//detiene los carros chocones
 		stop_cart1 = true;
 		stop_cart2 = true;
 		stop_cart3 = true;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {//activa los caballos
 		activate_caballos = true;
 	}
 
 	//-------------para activar la animacion por keyframes-------------------------
-	if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {//activa animacion por keyframes de la montaña
 		if (activate_coaster == false && (FrameIndex > 1))
 		{
 			resetElements();
@@ -1742,44 +2106,7 @@ void my_input(GLFWwindow *window)
 			activate_coaster = false;
 		}
 	}
-
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		z_coaster_cart -= 0.5f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		z_coaster_cart += 0.5f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		x_coaster_cart += 0.5f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		x_coaster_cart -= 0.5f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
-		y_coaster_cart -= 0.5f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
-		y_coaster_cart += 0.5f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-		rotx_coaster_cart -= 5.0f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-		rotx_coaster_cart += 5.0f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
-		roty_coaster_cart += 5.0f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
-		roty_coaster_cart -= 5.0f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
-		rotz_coaster_cart -= 5.0f;
-	}
-	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
-		rotz_coaster_cart += 5.0f;
-	}
-
+	/*
 	//To Save a KeyFrame
 	if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
 	{
@@ -1787,7 +2114,7 @@ void my_input(GLFWwindow *window)
 		{
 			saveFrame();
 		}
-	}
+	}*/
 }
 
 

@@ -1,8 +1,11 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (practicas.vcxproj, Project1.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
   Feria.cpp
-c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(207): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(441): warning C4305: '+=': truncamiento de 'double' a 'float'
-c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(450): warning C4305: '+=': truncamiento de 'double' a 'float'
-c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(1820): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
-c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(1827): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\canasta.h(13): warning C4005: 'MERIDIANOS': redefinición de macro
+  c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\cilindro.h(13): note: vea la definición anterior de 'MERIDIANOS'
+c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(210): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(256): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(539): warning C4305: '+=': truncamiento de 'double' a 'float'
+c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(548): warning C4305: '+=': truncamiento de 'double' a 'float'
+c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(2147): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\admin\documents\escuela\semestre2019-2\lab cg\feria\feria\feria.cpp(2154): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
   Feria.vcxproj -> C:\Users\ADMIN\Documents\Escuela\Semestre2019-2\LAB CG\Feria\Debug\Feria.exe
