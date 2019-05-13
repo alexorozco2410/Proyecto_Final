@@ -192,7 +192,7 @@ void Cilindro::roller_coaster(Shader projectionShader)
 	//  glDrawArrays(GL_POINTS,0,sizeof(esfera_pos)/sizeof(GLfloat));     // POINTS ... no indices for debug
 	
 	model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(-30.0, -4.0, -70.0));
+	model = glm::translate(model, glm::vec3(-30.0, -4.15, -70.0));//era -4.0
 	//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 1, 0));
 	model = glm::scale(model, glm::vec3(0.3f, 0.2f, 0.2f));
 	temp04 = model;
@@ -343,8 +343,8 @@ void Cilindro::roller_coaster(Shader projectionShader)
 	projectionShader.setMat4("model", model);
 
 	Cilindro::riel(model, projectionShader);
-	
-	//antes de giro de rueda
+
+//antes de giro de rueda
 	for (int i = 0; i < 5; i++) {
 		model = glm::translate(model, glm::vec3(3.14, 0, 0.0));
 		projectionShader.setMat4("model", model);
@@ -641,7 +641,7 @@ void Cilindro::roller_coaster(Shader projectionShader)
 	//projectionShader.setMat4("model", model);
 	//Cilindro::riel(model);
 
-	for (int i = 0; i < 14; i++) {
+	for (int i = 0; i < 13; i++) {
 		model = glm::translate(model, glm::vec3(3.14, 0, 0));
 		model = glm::rotate(model, glm::radians(-0.3f), glm::vec3(1, 0, 0));
 		projectionShader.setMat4("model", model);
@@ -649,10 +649,12 @@ void Cilindro::roller_coaster(Shader projectionShader)
 	}
 
 
-	
+	model = glm::translate(model, glm::vec3(2.5, 1.1, 0.0));
+	model = glm::rotate(model, glm::radians(60.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::riel(model, projectionShader);
 
 	
-
 	
 	//camino de regreso al inicio
 	model = temp04;
@@ -693,13 +695,362 @@ void Cilindro::roller_coaster(Shader projectionShader)
 	model = glm::scale(model, glm::vec3(2.0f, 1.0f, 1.0f));
 	projectionShader.setMat4("model", model);
 	Cilindro::riel(model, projectionShader);
-	for (int i = 0; i < 26; i++) {
+	for (int i = 0; i < 28; i++) {
 		model = glm::translate(model, glm::vec3(-3.14, 0, 0));
 		projectionShader.setMat4("model", model);
 		Cilindro::riel(model, projectionShader);
 	}
 
-	
+	model = glm::translate(model, glm::vec3(-3.9, 0, 0));
+	model = glm::scale(model, glm::vec3(1.6f, 1.0f, 1.0f));
+	projectionShader.setMat4("model", model);
+	Cilindro::riel(model, projectionShader);
+
+	//pilares
+	model = temp04;
+
+	model = glm::translate(model, glm::vec3(60.5, 37.0, -0.1));
+	model = glm::scale(model, glm::vec3(0.5f, 24.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 0.0, 6.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(70.5, 37.0, -0.1));
+	model = glm::scale(model, glm::vec3(0.5f, 25.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 0.0, 6.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(82.5, 8.0, -0.0));
+	model = glm::scale(model, glm::vec3(0.5f, 6.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 0.0, 6.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(95.0, 5.5, -0.0));
+	model = glm::scale(model, glm::vec3(0.5f, 5.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 0.0, 6.5));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(115.0, 5.5, -0.0));
+	model = glm::scale(model, glm::vec3(0.5f, 5.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 0.0, 6.5));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	//------------------inicia vuelta de rueda-----------------------------------
+	model = temp04;
+	model = glm::translate(model, glm::vec3(125.0, 10.0, -0.9));
+	model = glm::scale(model, glm::vec3(0.5f, 8.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	model = glm::translate(model, glm::vec3(0.0, -1.0, 6.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(127.3, 14.0, -1.8));
+	model = glm::scale(model, glm::vec3(0.5f, 12.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, -1.5, 7.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	//--------------------antes de terminar giro de rueda-----------------------------
+	model = temp04;
+	model = glm::translate(model, glm::vec3(86.5, 18.0, -6.8));
+	model = glm::scale(model, glm::vec3(0.5f, 14.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 2.0, 6.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	//termina rueda
+	model = temp04;
+	model = glm::translate(model, glm::vec3(95.0, 8.5, -8.3));
+	model = glm::scale(model, glm::vec3(0.5f, 8.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 2.5, 6.5));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(110.0, 5.5, -9.0));
+	model = glm::scale(model, glm::vec3(0.5f, 5.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 0.0, 6.5));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(135.0, 5.5, -8.3));
+	model = glm::scale(model, glm::vec3(0.5f, 5.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, 0.0, 5.4));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(154.0, 6.7, 5.3));
+	model = glm::scale(model, glm::vec3(0.5f, 8.1f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, -6.5, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(149.0, 12.0, 24.0));
+	model = glm::scale(model, glm::vec3(0.5f, 11.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.0, -0.0, 7.0));
+	model = glm::scale(model, glm::vec3(1.15f, 1.0f, 1.0f));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(130.0, 14.5, 30.5));
+	model = glm::scale(model, glm::vec3(0.5f, 13.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.05, 0.0, 5.0));
+	model = glm::scale(model, glm::vec3(1.08f, 1.0f, 1.0f));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(99.8, 16.0, 16.5));
+	model = glm::scale(model, glm::vec3(0.5f, 14.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.02, 8.0, -2.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(110.0, 10.5, -30.5));
+	model = glm::scale(model, glm::vec3(0.5f, 10.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, -2.0, 8.5));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(130.0, 8.5, -50.5));
+	model = glm::scale(model, glm::vec3(0.5f, 7.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(-0.07, 0.0, 7.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(160.0, 4.5, -64.5));
+	model = glm::scale(model, glm::vec3(0.5f, 4.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(-0.0, 0.0, 6.0));
+	model = glm::scale(model, glm::vec3(0.8f, 1.0f, 1.0f));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(188.0, 5.5, -62.5));
+	model = glm::scale(model, glm::vec3(0.5f, 5.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(-0.07, 0.0, 6.4));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(203.0, 30.0, -55.8));
+	model = glm::scale(model, glm::vec3(0.5f, 22.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 0.0, 7.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(212.0, 30.0, -50.0));
+	model = glm::scale(model, glm::vec3(0.5f, 22.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 5.0, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(212.5, 25.0, -5.0));
+	model = glm::scale(model, glm::vec3(0.5f, 18.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 4.5, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(213.5, 18.0, 46.5));
+	model = glm::scale(model, glm::vec3(0.5f, 13.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 4.5, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(203.0, 18.0, 71.5));
+	model = glm::scale(model, glm::vec3(0.5f, 13.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 0.0, 14.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(199.5, 18.0, 55.5));
+	model = glm::scale(model, glm::vec3(0.5f, 13.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 5.0, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(199.5, 17.0, 25.5));
+	model = glm::scale(model, glm::vec3(0.5f, 12.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 4.0, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(200.5, 14.5, -20.5));
+	model = glm::scale(model, glm::vec3(0.5f, 11.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 4.0, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(192.0, 14.5, -33.0));
+	model = glm::scale(model, glm::vec3(0.5f, 11.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 0.0, 10.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(185.5, 14.0, -10.0));
+	model = glm::scale(model, glm::vec3(0.5f, 10.5f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 4.0, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = temp04;
+	model = glm::translate(model, glm::vec3(185.5, 7.0, 20.0));
+	model = glm::scale(model, glm::vec3(0.5f, 6.0f, 0.5f));
+	model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0, 0, 1));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
+
+	model = glm::translate(model, glm::vec3(0.00, 4.5, 0.0));
+	projectionShader.setMat4("model", model);
+	Cilindro::render();
 	
 	glBindVertexArray(0);
 }

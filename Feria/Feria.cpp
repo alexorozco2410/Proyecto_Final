@@ -1,10 +1,30 @@
 /*---------------------------------------------------------*/
-/* ----------------  Práctica 10 --------------------------*/
+/* ----------------  Proyecto Final --------------------------*/
 /*-----------------    2019-2   ---------------------------*/
 /*-- Computación gráfica e interacción humano computadora --*/
+/*------------------Integrantes:--------------------------*/
 /*------------- Orozco Hernandez Alexis  -----------------*/
+/*------------- Zagoya Mellado Roberto Uriel-----------------*/
 /*---------------  Version VS 2017  ----------------------*/
+/*---------------------Grupo de teoria: 04----------------*/
 /*------------------  Grupo 04  --------------------------*/
+
+/*--------------------Controles:
+						W: mover hacia delante
+						S: Mover hacia atras
+						D: Mover hacia la derecha
+						A: Mover hacia la izquierda
+						P: Poner de noche
+						O : poner de dia
+						R: Activar la aniacion de la rueda de la fortuna
+						T: Activar las tazas
+						D: Desactivar las tazas
+						K: Activar el carro de comida
+						J: Activar los carros chocones
+						L: Detiene los carros chocones
+						H: Activa los caballos
+						V: Activa animacion por keyframes de la montaña */
+
 //#define STB_IMAGE_IMPLEMENTATION
 #include <glew.h>
 #include <glfw3.h>
@@ -1017,7 +1037,7 @@ void display(Shader shader, Shader lampshader, Shader lightingshader, Shader tex
 
 
 
-	model = glm::translate(tmp, glm::vec3(41.5f, 5.68f, -20.0));
+	model = glm::translate(tmp, glm::vec3(30.0f, 5.68f, -20.0));
 	model = glm::scale(model, glm::vec3(0.015f, 0.015f, 0.015f));
 	//model = glm::rotate(model, glm::radians(rot_personaje), glm::vec3(0.0f, 1.0f, 0.0f));
 
